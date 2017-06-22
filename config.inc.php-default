@@ -1,0 +1,318 @@
+<?php
+namespace MRBS;
+
+// $Id: config.inc.php 2799 2014-01-09 12:44:22Z cimorrison $
+
+/**************************************************************************
+ *   MRBS Configuration File
+ *   Configure this file for your site.
+ *   You shouldn't have to modify anything outside this file.
+ *
+ *   This file has already been populated with the minimum set of configuration
+ *   variables that you will need to change to get your system up and running.
+ *   If you want to change any of the other settings in systemdefaults.inc.php
+ *   or areadefaults.inc.php, then copy the relevant lines into this file
+ *   and edit them here.   This file will override the default settings and
+ *   when you upgrade to a new version of MRBS the config file is preserved.
+ **************************************************************************/
+
+/**********
+ * Timezone
+ **********/
+
+// The timezone your meeting rooms run in. It is especially important
+// to set this if you're using PHP 5 on Linux. In this configuration
+// if you don't, meetings in a different DST than you are currently
+// in are offset by the DST offset incorrectly.
+//
+// Note that timezones can be set on a per-area basis, so strictly speaking this
+// setting should be in areadefaults.inc.php, but as it is so important to set
+// the right timezone it is included here.
+//
+// When upgrading an existing installation, this should be set to the
+// timezone the web server runs in.  See the INSTALL document for more information.
+//
+// A list of valid timezones can be found at http://php.net/manual/timezones.php
+// The following line must be uncommented by removing the '//' at the beginning
+$timezone = "Europe/London";
+
+
+/*******************
+ * Database settings
+ ******************/
+// Which database system: "pgsql"=PostgreSQL, "mysql"=MySQL,
+// "mysqli"=MySQL via the mysqli PHP extension
+$dbsys = "mysql";
+// Hostname of database server. For pgsql, can use "" instead of localhost
+// to use Unix Domain Sockets instead of TCP/IP. For mysql/mysqli "localhost"
+// tells the system to use Unix Domain Sockets, and $db_port will be ignored;
+// if you want to force TCP connection you can use "127.0.0.1".
+$db_host = 'localhost';
+// If you need to use a non standard port for the database connection you
+// can uncomment the following line and specify the port number
+// $db_port = 1234;
+// Database name:
+$db_database = "bookings";
+// Schema name.  This only applies to PostgreSQL and is only necessary if you have more
+// than one schema in your database and also you are using the same MRBS table names in
+// multiple schemas.
+//$db_schema = "public";
+// Database login user name:
+$db_login = "db_username";
+// Database login password:
+$db_password = 'db_password';
+// Prefix for table names.  This will allow multiple installations where only
+// one database is available
+$db_tbl_prefix = "mrbs_";
+// Uncomment this to NOT use PHP persistent (pooled) database connections:
+// $db_nopersist = 1;
+
+
+/*******************
+ * Authentication settings
+ ******************/
+
+// Authentication type, see AUTHENTICATION for more details.
+$auth["type"] = "google";
+$auth["session"]  = "google";  
+
+// Authentication specific settings.
+
+// Allow only users in the following G Suite domain
+//$google_domain = 'example.com';
+
+// Google API Client ID (see https://developers.google.com/identity/sign-in/web/devconsole-project)
+$google_client_id = 'MY-CLIENT-ID-GOES-HERE.apps.googleusercontent.com';
+
+// reset system defaults
+unset($auth["admin"]);
+
+// Administrative users are declared at the bottom of this file.
+
+
+
+/* Add lines from systemdefaults.inc.php and areadefaults.inc.php below here
+   to change the default configuration. Do _NOT_ modify systemdefaults.inc.php
+   or areadefaults.inc.php.  */
+
+
+/*******************
+* General Settings
+******************/
+// If you want only administrators to be able to make and delete bookings,
+// set this variable to TRUE
+$auth['only_admin_can_book'] = FALSE;
+// If you want only administrators to be able to make repeat bookings,
+// set this variable to TRUE
+$auth['only_admin_can_book_repeat'] = FALSE;
+// If you want to prevent the public (ie un-logged in users) from
+// being able to view bookings, set this variable to TRUE
+$auth['deny_public_access'] = FALSE;
+
+
+// PRIVATE BOOKINGS SETTINGS
+
+// These settings are all set per area through MRBS.   These are the default
+// settings that are used when a new area is created.
+
+// Only administrators or the person who booked a private event can see
+// details of the event.  Everyone else just sees that the time/period
+// is booked on the schedule.
+
+$private_enabled = FALSE;  // DEFAULT VALUE FOR NEW AREAS
+           // Display checkbox in entry page to make
+           // the booking private.
+
+$private_mandatory = TRUE;  // DEFAULT VALUE FOR NEW AREAS
+           // If TRUE all new/edited entries will
+           // use the value from $private_default when saved.
+           // If checkbox is displayed it will be disabled.
+
+$private_default = TRUE;  // DEFAULT VALUE FOR NEW AREAS
+           // Set default value for "Private" flag on new/edited entries.
+           // Used if the $private_enabled checkbox is displayed
+           // or if $private_mandatory is set.
+
+$private_override = "private";  // DEFAULT VALUE FOR NEW AREAS    <- used to prevent public access
+           // Override default privacy behavior.
+           // "none" - Private flag on entry is used
+           // "private" - ALL entries are treated as private regardless
+           //             of private flag on the entry.
+           // "public" - NO entry is treated as private, regardless of
+           //            private flag on the entry.
+           // Overrides $private_default and $private_mandatory
+           // Consider your users' expectations of privacy before
+           // changing to "public" or from "private" to "none"
+
+$private_override_by_auth = TRUE;  // Allows any authenticated user to view all bookings
+          // used to override $private_override when user is logged in
+
+
+/**********************************************
+* Email settings
+**********************************************/
+
+// WHO TO EMAIL
+// ------------
+// The following settings determine who should be emailed when a booking is made,
+// edited or deleted (though the latter two events depend on the "When" settings below).
+// Set to TRUE or FALSE as required
+// (Note:  the email addresses for the room and area administrators are set from the
+// edit_area_room.php page in MRBS)
+$mail_settings['admin_on_bookings']      = FALSE;  // the addresses defined by $mail_settings['recipients'] below
+$mail_settings['area_admin_on_bookings'] = TRUE;  // the area administrator
+$mail_settings['room_admin_on_bookings'] = FALSE;  // the room administrator
+$mail_settings['booker']                 = FALSE;  // the person making the booking
+$mail_settings['book_admin_on_approval'] = TRUE;  // the booking administrator when booking approval is enabled
+                                                  // (which is the MRBS admin, but this setting allows MRBS
+                                                  // to be extended to have separate booking approvers)
+
+// WHEN TO EMAIL
+// -------------
+// These settings determine when an email should be sent.
+// Set to TRUE or FALSE as required
+
+$mail_settings['on_new']    = TRUE;   // when an entry is created
+$mail_settings['on_change'] = TRUE;  // when an entry is changed
+$mail_settings['on_delete'] = TRUE;  // when an entry is deleted
+
+
+// WHAT TO EMAIL
+// -------------
+// These settings determine what should be included in the email
+// Set to TRUE or FALSE as required
+$mail_settings['details']   = TRUE; // Set to TRUE if you want full booking details;
+                                    // otherwise you just get a link to the entry
+$mail_settings['html']      = TRUE; // Set to true if you want HTML mail
+$mail_settings['icalendar'] = FALSE; // Set to TRUE to include iCalendar details
+                                    // which can be imported into a calendar.  (Note:
+                                    // iCalendar details will not be sent for areas
+                                    // that use periods as there isn't a mapping between
+                                    // periods and time of day, so the calendar would not
+                                    // be able to import the booking)
+
+// HOW TO EMAIL - LANGUAGE
+// -----------------------------------------
+
+// Set the language used for emails (choose an available lang.* file).
+$mail_settings['admin_lang'] = 'en';   // Default is 'en'.
+
+
+// HOW TO EMAIL - BACKEND
+// ----------------------
+// Set the name of the backend used to transport your mails. Either 'mail',
+// 'smtp' or 'sendmail'. Default is 'mail'.
+$mail_settings['admin_backend'] = 'mail';
+
+
+/*******************
+* SMTP settings
+*/
+
+// These settings are only used with the "smtp" backend
+$smtp_settings['host'] = 'localhost';  // SMTP server
+$smtp_settings['port'] = 25;           // SMTP port number
+$smtp_settings['auth'] = FALSE;        // Whether to use SMTP authentication
+$smtp_settings['username'] = '';       // Username (if using authentication)
+$smtp_settings['password'] = '';       // Password (if using authentication)
+
+
+// EMAIL - MISCELLANEOUS
+// ---------------------
+
+// Set the email address of the From field. Default is 'admin_email@your.org'
+$mail_settings['from'] = 'centre@allsaints.church';
+
+// The address to be used for the ORGANIZER in an iCalendar event.   Do not make
+// this email address the same as the admin email address or the recipients
+// email address because on some mail systems, eg IBM Domino, the iCalendar email
+// notification is silently discarded if the organizer's email address is the same
+// as the recipient's.
+$mail_settings['organizer'] = 'centre@allsaints.church';
+
+// Set the recipient email. Default is 'admin_email@your.org'. You can define
+// more than one recipient like this "john@doe.com,scott@tiger.com"
+$mail_settings['recipients'] = 'bookings@allsaints.church';
+
+// Set email address of the Carbon Copy field. Default is ''. You can define
+// more than one recipient (see 'recipients')
+$mail_settings['cc'] = '';
+
+// Set to TRUE if you want the cc addresses to be appended to the to line.
+// (Some email servers are configured not to send emails if the cc or bcc
+// fields are set)
+$mail_settings['treat_cc_as_to'] = FALSE;
+
+// The filename to be used for iCalendar attachments.   Will always have the
+// extension '.ics'
+$mail_settings['ics_filename'] = "booking";
+
+
+
+/*************
+* Entry (booking) Types
+*************/
+
+// This array lists the configured entry type codes. The values map to a
+// single char in the MRBS database, and so can be any permitted PHP array
+// character.
+//
+// The default descriptions of the entry types are held in the language files
+// as "type.X" where 'X' is the entry type.  If you want to change the description
+// you can override the default descriptions by setting the $vocab_override config
+// variable.   For example, if you add a new booking type 'C' the minimum you need
+// to do is add a line to config.inc.php like:
+//
+// $vocab_override["en"]["type.C"] =     "New booking type";
+//
+// Each type has a color which is defined in the array $color_types in the styling.inc
+// file in the Themes directory
+
+unset($booking_types);
+$booking_types[] = "I";
+$booking_types[] = "E";
+$booking_types[] = "C";
+
+$vocab_override["en"]["type.I"] = "Church";
+$vocab_override["en"]["type.E"] = "Regular User";
+$vocab_override["en"]["type.C"] = "One off booking";
+
+// Default type for new bookings
+$default_type = "I";
+
+// Default description for new bookings
+$default_description = "";
+
+
+
+// Set this to TRUE if you do not want any email sent, whatever the rest of the settings.
+// This is a global setting that will override anything else.   Useful when testing MRBS.
+$mail_settings['disabled'] = FALSE;
+
+
+
+/*******************
+* Personalisation Settings
+******************/
+
+$theme = "allsaints";
+
+$times_along_top = TRUE;
+$clipped = FALSE;
+
+$weekstarts = 1;  // 0 = Sunday, 1 = Monday, etc.
+$strftime_format["daymonth"] = "%d %b";
+
+$mrbs_admin = "Centre Manager";
+$mrbs_admin_email = 'Centre Manager <centre@allsaints.church>';
+
+$mrbs_company = "All Saints Church";
+$mrbs_company_short = "All Saints";
+$mrbs_company_more_info = "Bookings";
+$mrbs_company_url = "https://office.allsaints.church/";
+$vocab_override["en"]["mrbs"] = "Church Centre Bookings";
+$vocab_override["en"]["about_mrbs"] = "About the Centre Booking System";
+$vocab_override["en"]["please_login"] = "Please login using your allsaints.church email account.";
+$vocab_override["en"]["unavailable"] = "Booked";
+
+$url_base = "https://centre.allsaints.church/bookings";

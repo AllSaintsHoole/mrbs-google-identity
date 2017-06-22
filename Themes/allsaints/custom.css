@@ -1,0 +1,151 @@
+.no-show {
+  display: none;
+}
+
+body {
+  font-weight: 300;
+}
+
+strong {
+  font-weight: 700;
+}
+
+.dwm_main th.first_last,
+tr th a {
+  padding: 2px;
+}
+
+.dwm_main tbody a,
+.dwm_main td.row_labels {
+  padding: 5px;
+}
+
+.row_labels .celldiv a {
+  padding: 0;
+}
+
+
+td#sticky_day {
+  background-color: #ff0066;
+  border: none;
+}
+
+#sticky_day .current {
+  color: #fff;
+}
+
+#header_search input {
+  width: 8em;
+  transition: width 0.6s;
+}
+
+#header_search input:focus {
+  width: 18em;
+  transition: width 0.3s;
+}
+
+#colour_key td {
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* ~~~~~~~~~ Datepicker ~~~~~~~~~ */
+
+.ui-widget-content {
+  background-color: #ecf0f5;
+  background-image: none;
+  border: 5px solid #3c8dbc;
+  border-radius: 0;
+}
+
+.ui-widget-header {
+  background-color: #3c8dbc;
+  background-image: none;
+  border: none;
+  border-radius: 0;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  background-color: #3c8dbc;
+  background-image: none;
+  border: none;
+  color: #fff;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight { /* selected day */
+  border: 1px solid #ff0066;
+  margin: -1px;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { /* current day */
+  background-color: #ff0066;
+}
+
+
+/* ~~~~~~~~~~ New header styling ~~~~~~~~~~ */
+header.main-header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  max-height: 100px;
+  z-index: 1030;
+  background-color: #3c8dbc;
+}
+
+header.main-header .logo {
+  width: 230px;
+  line-height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+
+#banner a:link,
+#banner a:visited {
+  font-weight: 300;
+}
+
+header.main-header .item {
+  height:50px;
+}
+
+header.main-header form {
+  margin-top: 15px;
+}
+
+header.main-header a.item span {
+  display: block;
+  padding: 15px;
+}
+
+header.main-header a.hilghlight {
+  background-color: #ff0066;
+}
+
+/* Login box */
+#logon_box a {
+  width: auto;
+  display: inline-block;
+}
+
+#logon_box a:first-of-type {
+   display: block;
+}
+
+#logon_box a:last-of-type {
+   padding-left: 10px;
+}
+
+#logon_box form {
+  display: inline-block;
+  margin-top: 0;
+}
+
+.g-signin2 {
+  margin: 6px;
+}
+
+.user_roles:not(:last-child):after {
+  content: '/';
+  padding: 0 5px;
+}
