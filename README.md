@@ -9,7 +9,7 @@ Repo also includes a theme inspired by the [AdminLTE](https://github.com/almasae
 
 1. Install MRBS (tested with 1.6.1)
 
-2. Edit `functions.inc` to include the extra lines of code below into the function `is_private_event($privacy_status)` (demonstrated in [functions.inc](functions.inc))
+2. (optional) Edit `functions.inc` to include the extra lines of code below into the function `is_private_event($privacy_status)` (demonstrated in [functions.inc](functions.inc)). This allows private events to be shown to any logged-in user, but not publicly.
 
 ```php
 // ADDITION BY CHRISTOPHER WILKINSON FOR ALL SAINTS CHURCH (2016)
