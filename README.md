@@ -14,7 +14,7 @@ Repo also includes a theme inspired by the [AdminLTE](https://github.com/almasae
 ```php
 // ADDITION BY CHRISTOPHER WILKINSON FOR ALL SAINTS CHURCH (2016)
 global $private_override_by_auth;
-if(checkAuthorised(TRUE) && isset($private_override_by_auth) && $private_override_by_auth ) // if user is logged in && overide requested
+if(strlen(getUserName()) > 0 && isset($private_override_by_auth) && $private_override_by_auth ) // if user is logged in && overide requested
 {
   $privacy_status = FALSE;
 }
